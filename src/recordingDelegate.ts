@@ -420,6 +420,7 @@ export class RecordingDelegate implements CameraRecordingDelegate {
       
       // Add dummy audio for HKSV compatibility if needed
       if (this.videoConfig?.audio === false) {
+        this.log.debug(`HKSV: Adding dummy audio input for HKSV recording compatibility`, this.cameraName)
         args.push(
           '-f', 'lavfi', '-i', 'anullsrc=cl=mono:r=32000',
         )

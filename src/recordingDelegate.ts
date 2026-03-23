@@ -326,7 +326,7 @@ export class RecordingDelegate implements CameraRecordingDelegate {
       '-r', configuration.videoCodec.resolution[2].toString() // Use configured framerate
     ]
 
-    if (this.videoConfig?.audio !== false && configuration?.audioCodec) {
+    if (configuration?.audioCodec) {
       // Replace the '-an' flag with audio parameters for HKSV recording
       const anIndex = videoArgs.indexOf('-an')
       if (anIndex !== -1) {
@@ -419,10 +419,13 @@ export class RecordingDelegate implements CameraRecordingDelegate {
       const args: string[] = ['-hide_banner', ...ffmpegInput]
       
       // Add dummy audio for HKSV compatibility if needed
+      // HKSV requires an audio track even when audio is disabled - use silent source
       if (this.videoConfig?.audio === false) {
         this.log.debug(`HKSV: Adding dummy audio input for HKSV recording compatibility`, this.cameraName)
         args.push(
           '-f', 'lavfi', '-i', 'anullsrc=cl=mono:r=32000',
+          '-map', '0:v',  // Video from camera source (input 0)
+          '-map', '1:a',  // Audio from silent source (input 1)
         )
       }
 

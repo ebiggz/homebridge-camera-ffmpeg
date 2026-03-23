@@ -326,7 +326,7 @@ export class RecordingDelegate implements CameraRecordingDelegate {
       '-r', configuration.videoCodec.resolution[2].toString() // Use configured framerate
     ]
 
-    if (configuration?.audioCodec) {
+    if (this.videoConfig?.audio !== false && configuration?.audioCodec) {
       // Replace the '-an' flag with audio parameters for HKSV recording
       const anIndex = videoArgs.indexOf('-an')
       if (anIndex !== -1) {
